@@ -16,7 +16,6 @@ db.connect((err) => {
   } else {
     console.log('Подключение к базе данных успешно!');
 
-    // Создайте таблицу, если её нет
     const createTableBooksQuery = fs.readFileSync('sqlFiles/createTableBooks.sql', 'utf8');
 
     db.query(createTableBooksQuery, (createTableErr) => {
