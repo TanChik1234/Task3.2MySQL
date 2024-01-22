@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>shpp-library</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="library Sh++">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/books-page_files/style.css">
+  <style>
+    #header{
+      margin-bottom: 40px;
+    }
+    
+    #container-button-log-out{
+      margin-right: 50px;
+    }
+
+    #main-container{
+      display: flex;
+    }
+
+    #pagination{
+      display: flex;
+      justify-content: center;
+    }
+
+    #add-btn{
+      margin-bottom: 8px;
+    }
+
+    #imagePreview{
+      border: none;
+    }
+
+    #form-container{
+      display: none;
+    }
+    
+    tbody[hidden]{
+      display: none;
+    }
+
+    #btn-container{
+      display: flex;
+      justify-content: space-between;
+    }
+    #btn-all-books{
+      display: none;
+    }
+  </style>
+  
+</head>
+<body>
+  <section id="header" class="header-wrapper">
+    <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="col-xs-5 col-sm-2 col-md-2 col-lg-2">
+            <div class="logo"><a href="http://localhost:3000/" class="navbar-brand"><span class="sh">Ш</span><span class="plus">++</span></a></div>
+          </div>
+          <div class="col-xs-12 col-sm-7 col-md-8 col-lg-8">
+            <div class="main-menu">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <form class="navbar-form navbar-right">
+                  <div class="form-group">
+                    <input id="search" type="text" placeholder="Найти книгу" class="form-control">
+                    <div class="loader"><img src="/books-page_files/loading.gif"></div>
+                    <div id="list" size="" class="bAutoComplete mSearchAutoComplete"></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="container-button-log-out">
+          <button class="btn btn-primary me-md-2 btn-success" type="button" id="btn-exit">Вийти</button>
+        </div>
+    </nav>
+  </section>
+
+  <div class="container" id="btn-container" >
+    <a href="http://localhost:3000/admin" class="btn btn-primary me-md-2 btn-success" id="btn-all-books">Всі книги</a>
+    <button class="btn btn-primary me-md-2 btn-success" type="button" id="btn-show-form">Додати книгу</button>
+  </div>
+
+<div id="main-container">
+  
+  <div class="container" id="list-container">
+    <table class="table table-striped table-hover" id="table_content">
+      <thead>
+
+    </table>  
+    <nav aria-label="navigation">
+      <ul class="pagination" id="pagination">
+        
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container" id="form-container">
+    <form class="row g-3 border border-success" action="/admin/addBook" method="post" enctype="multipart/form-data">
+      <div style="display: flex; justify-content: flex-end;">
+        <button type="button" class="btn-close" aria-label="Close" id="btn-close-form"></button>
+      </div>
+      
+      <div class="col-12">
+        <label for="inputTitle" class="form-label">Назва</label>
+        <input type="text" class="form-control" id="inputTitle" name="inputTitle" required>        
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputAuthor1" class="form-label">Автор 1</label>
+        <input type="text" class="form-control" id="inputAuthor1" name="inputAuthor1" required>
+      </div>
+      <div class="col-md-6">
+        <label for="inputAuthor2" class="form-label">Автор 2</label>
+        <input type="text" class="form-control" id="inputAuthor2" name="inputAuthor2">
+      </div>
+      <div class="col-md-6">
+        <label for="inputAuthor3" class="form-label">Автор 3</label>
+        <input type="text" class="form-control" id="inputAuthor3" name="inputAuthor3">
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputYear" class="form-label">Рік</label>
+        <input type="number" class="form-control" id="inputYear" name="inputYear" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="inputPages" class="form-label">Кількість сторінок</label>
+        <input type="number" class="form-control" id="inputPages" name="inputPages" required>
+      </div>
+
+      <div class="col-12">
+        <label for="inputDescription" class="form-label">Опис</label>
+        <input type="text" class="form-control" id="inputDescription" name="inputDescription" required>        
+      </div>
+
+      <div class="form-file">
+        <input type="file" class="form-file-input" id="customFile" onchange="previewImage()" name="customFile" required> 
+        <img id="imagePreview" src="#" alt="" width="100" height="100">
+      </div>
+
+      <div class="col-12" id="add-btn">
+        <button type="submit" class="btn btn-primary" id="btn-add-book" name="submit">Додати</button>
+      </div>
+      
+    </form>
+  </div>
+</div>
+
+
+<script id="thead-pattern" type="text/template">
+  <thead>
+    <tr>
+      <th scope="col">№</th>
+      <th scope="col" id="th-title" data-value="ASC">Назва</th>
+      <th scope="col" id="th-author1" data-value="ASC">Автори</th>
+      <th scope="col" id="th-year" data-value="ASC">Рік</th>
+      <th scope="col" id="th-pages" data-value="ASC">Сторінки</th>
+      <th scope="col" id="th-description" data-value="ASC">Опис</th>
+      <th scope="col" id="th-image_name" data-value="ASC">Зображення</th> 
+      <th scope="col" id="th-clicks" data-value="ASC">Кліки</th>
+      <th scope="col" id="th-views" data-value="ASC">Перегляди</th>
+      <th scope="col" id="th-deleted" data-value="ASC">Видалити</th>
+    </tr>
+  </thead>
+</script>
+<script id="row-pattern" type="text/template">
+  <tbody id="tbody{number-page}" {display}>
+    {page-rows}
+  </tbody>
+</script>
+<script id="pattern" type="text/template">
+          <tr>
+            <th scope="row">{serialNumber}</th> 
+            <td>{title}</td>
+            <td>{authors}</td>
+            <td>{year}</td>
+            <td>{pages}</td>
+            <td>{description}</td>
+            <td>{image-name}</td>
+            <td>{clicks}</td>
+            <td>{views}</td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="{id}" {checked}>
+              </div>
+            </td>
+          </tr>
+</script>
+<script id="miniItem" type="text/template">
+  <div class="eAutoComplete_itemList">
+      <a href="http://localhost:3000/book/{id}">
+          <img src="/uploads/{image}" alt="{title}">
+          <span class="infoBook title col-my-10">{title}</span> 
+          <span class="col-my-10">({authors})</span>
+      </a>
+  </div>
+</script>
+<script id="more" type="text/template">
+  <div class="eAutoComplete_itemMore">
+      <a href="#" id="more-link">Більше співпадінь</a>
+  </div>
+</script>
+<script id="not_found" type="text/template">
+  <div class="eAutoComplete_itemList" style="opacity: 1; display: flex;">
+      <div class="data-not-found">
+          <span class="infoBook title col-my-10">{title}</span> 
+          <span class="col-my-10">Миллионы натренированных обезьян облазили всю библиотеку и не нашли ничего подходящего, что могло бы соответствовать Вашему запросу.</span>
+      </div>
+      <img src="/uploads/{image}" alt="{title}">
+
+  </div>
+</script>
+
+<script id="page-link-pattern" type="text/template">
+  <li class="page-item"><a class="page-link {active}" href="#" id="page-link{number}">{number}</a></li>
+</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="/books-page_files/libs.min.js"></script>
+<script src="/books-page_files/search.js"></script>
+<script src="/books-page_files/common.js"></script>
+<script src="/admin-page_files/index-admin.js"></script>
+</body>
+</html>
